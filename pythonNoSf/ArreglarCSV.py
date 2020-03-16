@@ -7,7 +7,7 @@ Created on Wed Oct 30 14:02:28 2019
 import pandas as pd
 import numpy as np
 EFelicidad = pd.read_excel('Final_Felicidad_Dicotomizadas(7_11_2019).xlsx',
-                       sheet_name='112 Muestras original').drop(['Marca temporal',
+                       sheet_name='Respuestas de formulario 1').drop(['Marca temporal',
                                 'Dirección de correo electrónico'],axis=1)
 EFelicidad=EFelicidad.replace(["Totalmente en desacuerdo", "Algo en desacuerdo",
                                "Ni en acuerdo ni desacuerdo", "Algo de acuerdo",
@@ -37,19 +37,7 @@ def generarClase(vector,med):
     
 
 
-EFelicidad=EFelicidad.replace(['20 o menos','más de 20'],[0,1])
-EFelicidad=EFelicidad.replace(['Hombre','Mujer'],[0,1])
-EFelicidad=EFelicidad.replace(['1 a 5','6 a 10'],[0,1])
-EFelicidad=EFelicidad.replace(['1 y 2','3 o más'],[0,1])
-EFelicidad=EFelicidad.replace(['Soltero','Otro'],[0,1])
-EFelicidad=EFelicidad.replace(['Si','No'],[1,0])
-EFelicidad=EFelicidad.replace(['Bajo','Suficiente'],[0,1])
-EFelicidad=EFelicidad.replace(['Inferior o igual a 3.5','Superior a 3.5'],[0,1])
-EFelicidad=EFelicidad.replace(['No','Si','SI'],[0,1,0])
-EFelicidad=EFelicidad.replace(['Familiar u otro','Usted mismo'],[0,1])
-EFelicidad=EFelicidad.replace(['Propia','Arriendo'],[0,1])
-EFelicidad=EFelicidad.replace(['0 - 120 min','Mayor de 120 min'],[0,1])
-EFelicidad=EFelicidad.replace(['0 - 60 min','más de 60 min'],[0,1])
+
 EFelicidadCSV=EFelicidad.to_numpy()
 creaTablaNumericarCSV=invertirColumnas(EFelicidadCSV)
 EFelicidadcsv=creaTablaNumericarCSV
@@ -57,11 +45,30 @@ EFelicidadcsv2=EFelicidadcsv[:,0:29]
 sumaMuestras=EFelicidadcsv2.sum(axis=1)/29
 media=sumaMuestras.mean()
 claseGenerada=np.array(generarClase(sumaMuestras.copy(),media))
-crearCSV=pd.DataFrame(creaTablaNumericarCSV,columns=EFelicidad.columns)
-crearCSV['clase']=claseGenerada.reshape(len(claseGenerada),1)
+crearCSVEF=pd.DataFrame(creaTablaNumericarCSV,columns=EFelicidad.columns)
+crearCSVEF['clase']=claseGenerada.reshape(len(claseGenerada),1)
 #np.hstack((EFelicidadcsv,claseGenerada.reshape(len(claseGenerada),1)))
 #lo anterior agrega una columan en numpy
 #'tablaCon29REguntasInvertidas.csv', mode='a', index=False, header=False,sep=';',decimal=','
-crearCSV.to_csv('DFnumericoInvertido.csv', index=False, sep=',')
+crearCSVEF.to_csv('DFnumericoInvertido.csv', index=False, sep=',')
 
 
+#Encuesta FELICIDAD- Factor_ Personal (respuestas)
+Epersonal = pd.read_excel('Encuesta FELICIDAD- Factor_ Personal (respuestas).xlsx',
+                       sheet_name='Respuestas de formulario 1').drop(['Marca temporal',
+                                'Dirección de correo electrónico: '],axis=1)
+
+Epersonal=Epersonal.replace(['No','Si','Sí'],[0,1,1])
+Epersonal=Epersonal.replace(['Masculino','Femenino'],[1,0])
+Epersonal=Epersonal.replace(['Facultad de Ciencias y Educación'],[0])
+Epersonal=Epersonal.replace(['Facultad de Ingeniería'],[1])
+Epersonal=Epersonal.replace(['Facultad de Medio Ambiente y Recursos Naturales'],[2])
+Epersonal=Epersonal.replace(['Facultad Tecnológica'],[3])
+Epersonal=Epersonal.replace(['Facultad de Artes - ASAB'],[4])
+Epersonal=Epersonal.replace(['Soltero','Otro'],[0,1])
+Epersonal=Epersonal.replace(['LA REGIÓN CARIBE.','LA REGIÓN ANDINA.'],[0,1])
+Epersonal=Epersonal.replace(['LA REGIÓN PACÍFICA.','LA REGIÓN AMAZÓNICA.'],[2,3])
+Epersonal=Epersonal.replace(['LA REGIÓN DE LOS LLANOS ORIENTALES.','LA REGIÓN INSULAR.'],[4,5])
+Epersonal=Epersonal.replace(['Introvertido','Extrovertido','Histérico','Ansioso-obsesivos.','Ansioso-obsesivo'],[0,1,2,4,4])
+Epersonal=Epersonal.replace(['60 minutos o menos','más de 60 minutos'],[0,1])
+Epersonal.to_csv('EPnumerio.csv', index=False, sep=',')

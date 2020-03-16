@@ -7,13 +7,8 @@ Created on Thu Oct 17 21:44:08 2019
 import pandas as pd
 import numpy as np
 
-EFelicidad = pd.read_csv('DFnumericoInvertido.csv').drop(['Edad:','Género:','Semestre:',
-                                  'Estrato económico:','Estado civil:','Trabaja:',
-                                  '¿El nivel de sus ingresos con respecto a sus gastos mensuales son?',
-                                  'Promedio académico:','Es creyente','¿Quién costea sus estudios?',
-                                  'Tiempo promedio diario de uso del celular:',
-                                  '¿En que tipo de casa vive?','clase','Tiempo de traslado'], axis=1)
-matrizCovarianza12=np.cov(EFelicidad.T)
+
+
 def calcualrVarPorPregunta(matriz):
     #funcion que calcula la varianza de elemento por elemento
     vector = []
@@ -29,7 +24,7 @@ def calcularVarTotal(matriz):
         vector.append(np.sum(matriz[i:i+1,:]))
     vectorNP=np.array(vector)    
     return np.array(vector),np.var(vectorNP)
-k=len(EFelicidad.T)
+
 def alfaCronbach(matriz1,sumVPP,varTotal):
     k=len(matriz1.T)
     alfacrombach=(k/(k-1))*(1-(sumVPP/varTotal))
@@ -65,12 +60,9 @@ def indicecorrelaT(matriz1,totalpersoa):
         c=np.corrcoef(a,b-a)[0,1]
         salida.append(c)
     return np.array(salida)
-EFelicidad = pd.read_csv('DFnumericoInvertido.csv').drop(['Edad:','Género:','Semestre:',
-                          'Estrato económico:','Estado civil:','Trabaja:',
-                          '¿El nivel de sus ingresos con respecto a sus gastos mensuales son?',
-                          'Promedio académico:','Es creyente','¿Quién costea sus estudios?',
-                          'Tiempo promedio diario de uso del celular:',
-                          '¿En que tipo de casa vive?','clase','Tiempo de traslado'], axis=1)
+EFelicidad = pd.read_csv('DFnumericoInvertido.csv')
+matrizCovarianza12=np.cov(EFelicidad.T)
+k=len(EFelicidad.T)
 matrizEFelicidad=EFelicidad.to_numpy().copy()
 totalporpersona,VarT=calcularVarTotal(matrizEFelicidad)
 indicehomogeneidad=corrItemTest(matrizEFelicidad,totalporpersona) 
